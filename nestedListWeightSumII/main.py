@@ -41,25 +41,60 @@
 #        :rtype List[NestedInteger]
 #        """
 
-class Solution:
-    def depthSum(self, nestedList: List[NestedInteger]) -> int:
-        def helper(nestedList, depth):
-            sum = 0
-            for x in nestedList:
-                if x.isInteger():
-                    sum += x.getInteger() * depth
-                else:
-                    sum += helper(x.getList(), depth + 1)
-            return sum
+from collections import defaultdict
 
-        return helper(nestedList, 1)
+class Solution:
+    ####################
+    # using cache/dict #
+    ####################
+    # def helperII(nestedList, level, cache):
+    #     self.maxLevel = max(self.maxLevel, level)
+    #
+    #     for x in nestedList:
+    #         if x.isInteger():
+    #             cache[level] += x.getInteger()
+    #         else:
+    #             self.helperII(x.getList(), level + 1, cache)
+    #     return
+
+    # def depthSumInverse(self, nestedList):
+    #     cache = defaultdict(int)
+    #     self.maxLevel = -1
+    #     self.helperII(nestedList, 1, cache)
+    #
+    #     totalSum = 0
+    #
+    #     for k, v in cache.items():
+    #         totalSum = totalSum + v * (self.maxLevel - k + 1)
+    #
+    #     return totalSum
+
+    #############
+    # using BFS #
+    #############
+    def depthSumInverse(self, nestedList: List[NestedInteger]) -> int: #
+        total, levelTotal = 0, 0
+        level = nestedList
+
+        while level:
+            nextLevel = []
+            for nestedInteger in level:
+                if nestedInteger.isInteger():
+                    levelTotal += nestedInteger.getInteger()
+                else:
+                    nextLevel.extend(nestedInteger.getList())
+            total += levelTotal
+            level = nextLevel
+
+        return total
 
 def main():
-    nestedList = [[1,1], 2, [1,1]]
-    # nestedList = [1, [4, [6]]]
+    # nestedList = [[1,1], 2, [1,1]]
+    nestedList = [1, [4, [6]]]
 
     soln = Solution()
-    answer = soln.depthSum(nestedList)
+    # answer = soln.depthSum(nestedList)
+    answer = soln.depthSumInverse(nestedList)
     print(answer)
 
 if __name__ == "__main__":
