@@ -42,7 +42,7 @@
 #        """
 
 class Solution:
-    def depthSum(nestedList):
+    def depthSum(self, nestedList: List[NestedInteger]) -> int:
         def helper(nestedList, depth):
             sum = 0
             for x in nestedList:
@@ -50,8 +50,9 @@ class Solution:
                     sum += x.getInteger() * depth
                 else:
                     sum += helper(x.getList(), depth + 1)
-                    
-        return sum
+            return sum
+
+        return helper(nestedList, 1)
 
 def main():
     nestedList = [[1,1], 2, [1,1]]
